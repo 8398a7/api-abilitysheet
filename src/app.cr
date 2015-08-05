@@ -15,12 +15,18 @@ class UsersController < Base::Controller
 end
 
 class ApiAbilitySheet < Base::App
+  settings.configure do |conf|
+    conf.environment = "production"
+  end
+
   routes.draw do
     get "/api/v1/users/registered", "users#registered"
     register UsersController
   end
-end
 
+  use Middleware::TimeLogger
+  use Middleware::HttpLogger
+end
 
 app = ApiAbilitySheet.new
 app.serve
