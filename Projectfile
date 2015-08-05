@@ -1,0 +1,5 @@
+deps do
+  github "will/crystal-pg"
+  github "Codcore/amethyst"
+  github "spalger/crystal-mime"
+end
