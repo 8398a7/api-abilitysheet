@@ -29,7 +29,7 @@ class UsersController < Base::Controller
     recent_users.each do |ru|
       info = DB.exec("SELECT users.djname, users.iidxid, users.pref, scores.updated_at, scores.state, users.grade, sheets.title FROM users, scores, sheets WHERE users.id = #{ru} AND users.id = scores.user_id AND sheets.id = scores.sheet_id AND scores.state != 7 ORDER BY scores.updated_at desc LIMIT 1")
       row = info.rows[0]
-      ret.push({"id": ru.to_s, "djname": row[0].to_s, "iidxid": row[1].to_s, "pref": row[2].to_s, "updated_at": row[3].to_s, "state": row[4].to_s, "grade": row[5].to_s, "title": row[6].to_s})
+      ret.push({"id": ru.to_s, "djname": row[0].to_s, "iidxid": row[1].to_s, "pref": row[2].to_s, "updated_at": row[3].to_s.split(" ")[0], "state": row[4].to_s, "grade": row[5].to_s, "title": row[6].to_s})
     end
 
     json ret.to_json
