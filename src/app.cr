@@ -1,7 +1,9 @@
 require "amethyst"
 require "pg"
 
-DB = PG.connect("postgres://abilitysheet-iidx@localhost:5432/abilitysheet-iidx_production")
+DB_URL = File.read("./.env").chomp
+
+DB = PG.connect(DB_URL)
 
 class UsersController < Base::Controller
   actions :registered, :recent200
