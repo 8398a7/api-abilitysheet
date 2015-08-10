@@ -21,10 +21,10 @@ class UsersController < Base::Controller
     recent_users = Array(Int32).new
     ret = Array(Hash(String, String)).new
     users.rows.each do |row|
+      break if 200 <= recent_users.length
       next if recent_users.index(row[0])
       recent_users.push row[0]
       ret.push({ "id": row[0].to_s, "djname": row[1], "iidxid": row[2], "pref": row[3].to_s, "updated_at": row[4].to_s.split(" ")[0], "state": row[5].to_s, "grade": row[6].to_s, "title": row[7] })
-      break if 200 <= recent_users.length
     end
 
     json ret.to_json
