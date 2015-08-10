@@ -16,20 +16,15 @@ class UsersController < Base::Controller
   end
 
   def recent200
-    users = DB.exec({Int32}, "SELECT users.id FROM users, scores WHERE users.id = scores.user_id AND scores.state != 7 ORDER BY scores.updated_at DESC LIMIT 6400")
+    users = DB.exec({Int32, String, String, Int32, Time, Int32, Int32, String}, "SELECT users.id, users.djname, users.iidxid, users.pref, scores.updated_at, scores.state, users.grade, sheets.title  FROM users, scores, sheets WHERE users.id = scores.user_id AND scores.state != 7 AND sheets.id = scores.sheet_id ORDER BY scores.updated_at DESC LIMIT 6400")
 
     recent_users = Array(Int32).new
+    ret = Array(Hash(String, String)).new
     users.rows.each do |row|
       next if recent_users.index(row[0])
       recent_users.push row[0]
+      ret.push({ "id": row[0].to_s, "djname": row[1], "iidxid": row[2], "pref": row[3].to_s, "updated_at": row[4].to_s.split(" ")[0], "state": row[5].to_s, "grade": row[6].to_s, "title": row[7] })
       break if 200 <= recent_users.length
-    end
-
-    ret = Array(Hash(String, String)).new
-    recent_users.each do |ru|
-      info = DB.exec("SELECT users.djname, users.iidxid, users.pref, scores.updated_at, scores.state, users.grade, sheets.title FROM users, scores, sheets WHERE users.id = #{ru} AND users.id = scores.user_id AND sheets.id = scores.sheet_id AND scores.state != 7 ORDER BY scores.updated_at desc LIMIT 1")
-      row = info.rows[0]
-      ret.push({"id": ru.to_s, "djname": row[0].to_s, "iidxid": row[1].to_s, "pref": row[2].to_s, "updated_at": row[3].to_s.split(" ")[0], "state": row[4].to_s, "grade": row[5].to_s, "title": row[6].to_s})
     end
 
     json ret.to_json
