@@ -18,14 +18,12 @@ class UsersController < Base::Controller
   def recent200
     users = DB.exec({Int32}, "SELECT users.id FROM users, scores WHERE users.id = scores.user_id AND scores.state != 7 ORDER BY scores.updated_at DESC LIMIT 6400")
 
-    hash = Hash(String | Int32, String).new
-
     recent_users = Array(Int32).new
     users.rows.each do |row|
-      recent_users.push row.first unless recent_users.index(row.first)
+      next if recent_users.index(row[0])
+      recent_users.push row[0]
       break if 200 <= recent_users.length
     end
-    recent_users.uniq!
 
     ret = Array(Hash(String, String)).new
     recent_users.each do |ru|
