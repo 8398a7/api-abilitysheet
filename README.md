@@ -10,7 +10,7 @@ $ ./app
 
 ## nginx
 
-```nginx.conf
+```
 upstream crystal {
   server localhost:8080;
   keepalive 300;
