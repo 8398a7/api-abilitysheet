@@ -37,8 +37,8 @@ class ApiAbilitySheet < Base::App
   end
 
   routes.draw do
-    get "/api/v1/users/registered", "users#registered"
-    get "/api/v1/users/recent200", "users#recent200"
+    get "/v1/users/registered", "users#registered"
+    get "/v1/users/recent200", "users#recent200"
     register UsersController
   end
 
