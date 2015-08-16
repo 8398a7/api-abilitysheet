@@ -31,6 +31,19 @@ class UsersController < Base::Controller
   end
 end
 
+class SheetsController < Base::Controller
+  actions :index
+
+  def index
+    sheets = Array(Hash(String, String)).new
+    results = DB.exec({Int32, String}, "SELECT sheets.id, sheets.title FROM sheets WHERE sheets.active = true")
+    results.rows.each do |row|
+      sheets.push({ "id": row[0].to_s, "title": row[1] })
+    end
+    json sheets.to_json
+  end
+end
+
 class ApiAbilitySheet < Base::App
   settings.configure do |conf|
     conf.environment = "production"
@@ -39,7 +52,9 @@ class ApiAbilitySheet < Base::App
   routes.draw do
     get "/v1/users/registered", "users#registered"
     get "/v1/users/recent200", "users#recent200"
+    get "/v1/sheets", "sheets#index"
     register UsersController
+    register SheetsController
   end
 
   use Middleware::TimeLogger
