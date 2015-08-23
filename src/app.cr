@@ -36,7 +36,7 @@ class SheetsController < Base::Controller
 
   def index
     sheets = Array(Hash(String, String)).new
-    results = DB.exec({Int32, String}, "SELECT sheets.id, sheets.title FROM sheets WHERE sheets.active = true")
+    results = DB.exec({Int32, String}, "SELECT sheets.id, sheets.title FROM sheets WHERE sheets.active = true ORDER BY sheets.id")
     results.rows.each do |row|
       sheets.push({ "id": row[0].to_s, "title": row[1] })
     end
