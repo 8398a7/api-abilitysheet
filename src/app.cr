@@ -36,9 +36,9 @@ class SheetsController < Base::Controller
 
   def index
     sheets = Array(Hash(String, String)).new
-    results = DB.exec({Int32, String}, "SELECT sheets.id, sheets.title FROM sheets WHERE sheets.active = true ORDER BY sheets.id")
+    results = DB.exec({Int32, String, Int32, Int32}, "SELECT sheets.id, sheets.title, sheets.n_ability, sheets.h_ability FROM sheets WHERE sheets.active = true ORDER BY sheets.id")
     results.rows.each do |row|
-      sheets.push({ "id": row[0].to_s, "title": row[1] })
+      sheets.push({ "id": row[0].to_s, "title": row[1], "n_ability": row[2].to_s, "h_ability": row[3].to_s })
     end
     json sheets.to_json
   end
