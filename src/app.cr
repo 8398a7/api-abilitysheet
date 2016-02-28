@@ -4,6 +4,7 @@ require "kemal-pg"
 
 config = Kemal.config
 config.env = "production"
+config.port = 8080
 
 DB_URL = File.read("./.env").chomp
 pg_connect DB_URL
