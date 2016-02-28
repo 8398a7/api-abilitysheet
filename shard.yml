@@ -1,0 +1,8 @@
+name: kemal-sample
+version: 0.1.0
+
+dependencies:
+  kemal:
+    github: sdogruyol/kemal
+  kemal-pg:
+    github: sdogruyol/kemal-pg
