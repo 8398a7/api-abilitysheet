@@ -1,64 +1,46 @@
-require "amethyst"
-require "pg"
+require "kemal"
+require "json"
+require "kemal-pg"
+
+config = Kemal.config
+config.env = "production"
 
 DB_URL = File.read("./.env").chomp
+pg_connect DB_URL
 
-DB = PG.connect(DB_URL)
+get "/users/recent200" do |env|
+  env.response.content_type = "application/json"
+  users = conn.exec({Int32, String, String, Int32, Time, Int32, Int32, String}, "SELECT users.id, users.djname, users.iidxid, users.pref, scores.updated_at, scores.state, users.grade, sheets.title  FROM users, scores, sheets WHERE users.id = scores.user_id AND scores.state != 7 AND sheets.id = scores.sheet_id ORDER BY scores.updated_at DESC LIMIT 6400")
+  release
 
-class UsersController < Base::Controller
-  actions :registered, :recent200
-
-  def registered
-    result = DB.exec({Int32}, "SELECT count(id) FROM users")
-    hash = Hash(String, Int32).new
-    hash["users"] = result.rows[0].to_a.first
-    json hash.to_json
+  recent_users = Array(Int32).new
+  ret = Array(Hash(String, String)).new
+  users.rows.each do |row|
+    break if 200 <= recent_users.size
+    next if recent_users.index(row[0])
+    recent_users.push row[0]
+    ret.push({ "id": row[0].to_s, "djname": row[1], "iidxid": row[2], "pref": row[3].to_s, "updated_at": row[4].to_s.split[0], "state": row[5].to_s, "grade": row[6].to_s, "title": row[7] })
   end
 
-  def recent200
-    users = DB.exec({Int32, String, String, Int32, Time, Int32, Int32, String}, "SELECT users.id, users.djname, users.iidxid, users.pref, scores.updated_at, scores.state, users.grade, sheets.title  FROM users, scores, sheets WHERE users.id = scores.user_id AND scores.state != 7 AND sheets.id = scores.sheet_id ORDER BY scores.updated_at DESC LIMIT 6400")
-
-    recent_users = Array(Int32).new
-    ret = Array(Hash(String, String)).new
-    users.rows.each do |row|
-      break if 200 <= recent_users.length
-      next if recent_users.index(row[0])
-      recent_users.push row[0]
-      ret.push({ "id": row[0].to_s, "djname": row[1], "iidxid": row[2], "pref": row[3].to_s, "updated_at": row[4].to_s.split[0], "state": row[5].to_s, "grade": row[6].to_s, "title": row[7] })
-    end
-
-    json ret.to_json
-  end
+  ret.to_json
 end
 
-class SheetsController < Base::Controller
-  actions :index
-
-  def index
-    sheets = Array(Hash(String, String)).new
-    results = DB.exec({Int32, String, Int32, Int32}, "SELECT sheets.id, sheets.title, sheets.n_ability, sheets.h_ability FROM sheets WHERE sheets.active = true ORDER BY sheets.id")
-    results.rows.each do |row|
-      sheets.push({ "id": row[0].to_s, "title": row[1], "n_ability": row[2].to_s, "h_ability": row[3].to_s })
-    end
-    json sheets.to_json
-  end
+get "/users/count" do |env|
+  env.response.content_type = "application/json"
+  result = conn.exec({Int64}, "SELECT count(id) FROM users")
+  release
+  hash = Hash(String, Int64).new
+  hash["users"] = result.rows[0].to_a.first
+  hash.to_json
 end
 
-class ApiAbilitySheet < Base::App
-  settings.configure do |conf|
-    conf.environment = "production"
+get "/sheets" do |env|
+  env.response.content_type = "application/json"
+  sheets = Array(Hash(String, String)).new
+  results = conn.exec({Int32, String, Int32, Int32}, "SELECT sheets.id, sheets.title, sheets.n_ability, sheets.h_ability FROM sheets WHERE sheets.active = true ORDER BY sheets.id")
+  release
+  results.rows.each do |row|
+    sheets.push({ "id": row[0].to_s, "title": row[1], "n_ability": row[2].to_s, "h_ability": row[3].to_s })
   end
-
-  routes.draw do
-    get "/v1/users/registered", "users#registered"
-    get "/v1/users/recent200", "users#recent200"
-    get "/v1/sheets", "sheets#index"
-    register UsersController
-    register SheetsController
-  end
-
-  use Middleware::TimeLogger
+  sheets.to_json
 end
-
-app = ApiAbilitySheet.new
-app.serve
