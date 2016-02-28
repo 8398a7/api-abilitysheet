@@ -8,6 +8,11 @@ $ crystal build --release src/app.cr
 $ ./app
 ```
 
+## Requirements
+
+- crystal 0.12.0
+- postgresql 9.5.1
+
 ## nginx
 
 ```
