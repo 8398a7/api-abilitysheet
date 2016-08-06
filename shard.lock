@@ -2,25 +2,25 @@ version: 1.0
 shards:
   kemal:
     github: sdogruyol/kemal
-    version: 0.9.2
+    commit: e5a9035a6111fdcfa781e3b8695a0878753cabee
 
   kemal-pg:
     github: sdogruyol/kemal-pg
-    version: 0.4.0
+    commit: f529d34156f111962d5d95abc3635df2b12975ad
 
   kilt:
     github: jeromegn/kilt
-    version: 0.3.0
+    version: 0.3.3
 
   pg:
     github: will/crystal-pg
-    commit: cafe58f3062b54e71ee5d5bcaafc7e584ae10d18
+    commit: cafe74083faacb8aedd7097e768504fa7b0a7d57
 
   pool:
     github: ysbaddaden/pool
-    commit: b2c519adaf4f7ef5a60b2027cd039f932db0b086
+    commit: c4ecfad1b87fbd8c6484d1fd536ccfd14c40cc94
 
   radix:
     github: luislavena/radix
-    version: 0.1.0
+    version: 0.3.0
 

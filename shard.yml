@@ -4,5 +4,7 @@ version: 0.1.0
 dependencies:
   kemal:
     github: sdogruyol/kemal
+    branch: master
   kemal-pg:
     github: sdogruyol/kemal-pg
+    branch: master
