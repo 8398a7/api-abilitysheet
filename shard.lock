@@ -1,5 +1,9 @@
 version: 1.0
 shards:
+  dotenv:
+    github: gdotdesign/cr-dotenv
+    commit: 345a63900ab84ac702f2fff37c39cc089fe47f74
+
   kemal:
     github: sdogruyol/kemal
     commit: e5a9035a6111fdcfa781e3b8695a0878753cabee
