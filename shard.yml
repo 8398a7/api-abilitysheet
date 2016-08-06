@@ -8,3 +8,5 @@ dependencies:
   kemal-pg:
     github: sdogruyol/kemal-pg
     branch: master
+  dotenv:
+    github: gdotdesign/cr-dotenv

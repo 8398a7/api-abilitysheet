@@ -1,13 +1,15 @@
 require "kemal"
 require "json"
 require "kemal-pg"
+require "dotenv"
+
+Dotenv.load
 
 config = Kemal.config
 config.env = "production"
 config.port = 8080
 
-DB_URL = File.read("./.env").chomp
-pg_connect DB_URL, capacity: 10, timeout: 0.1
+pg_connect ENV["DB_URL"], capacity: 10, timeout: 0.1
 
 get "/users/recent200" do |env|
   env.response.content_type = "application/json"

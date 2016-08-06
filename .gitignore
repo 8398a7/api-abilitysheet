@@ -5,3 +5,5 @@ libs/
 app
 .env
 *.log
+.bundle
+bundle
