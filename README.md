@@ -4,8 +4,10 @@
 
 ```
 $ shards
+$ bundle install --path bundle
+$ cp .env.circleci .env # your setting
 $ crystal build --release src/app.cr
-$ ./app
+$ foreman start
 ```
 
 ## Requirements
