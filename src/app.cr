@@ -41,7 +41,7 @@ get "/users/count" do |env|
   result = connection.exec({ Int64 }, "SELECT count(id) FROM users")
   release
 
-  { users: result.rows[0].to_a.first }.to_json
+  { users: result.rows[0][0] }.to_json
 end
 
 get "/sheets" do |env|
