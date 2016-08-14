@@ -21,7 +21,7 @@ RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selectio
     sudo apt-get install postgresql postgresql-contrib -y
 
 EXPOSE 8080
-CMD cd /$HOME && \
+CMD cd $HOME && \
     ./app
 
 # docker build -t crystal .
