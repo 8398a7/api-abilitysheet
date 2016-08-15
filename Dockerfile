@@ -5,7 +5,9 @@ ENV CRENV_ROOT /usr/local/crenv
 ENV PATH $CRENV_ROOT/bin:$CRENV_ROOT/shims:$PATH
 ENV CRYSTAL_VERSION 0.18.7
 
-RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+RUN \
+      echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && \
+      ln --force /usr/share/zoneinfo/Japan /etc/localtime
 RUN apt-get update && apt-get install software-properties-common -y
 RUN \
       apt-add-repository ppa:git-core/ppa && \
