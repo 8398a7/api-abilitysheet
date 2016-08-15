@@ -3,16 +3,15 @@
 ## Usage
 
 ```
-$ shards
+$ docker build -t abilitysheet .
 $ cp .env.circleci .env # your setting
-$ crystal build --release src/app.cr
-$ foreman start
+$ docker run -d -p 8080:8080 --name=api-abilitysheet abilitysheet
 ```
 
 ## Requirements
 
-- crystal 0.18.7
-- postgresql 9.5.1
+- postgresql 9.5.3
+- docker 1.12.0
 
 ## nginx
 
