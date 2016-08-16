@@ -40,11 +40,3 @@ namespace :deploy do
   after :write_logs, :remove
   after :remove, :run
 end
-
-namespace :logs do
-  task :show do
-    on roles(:app) do
-      puts capture 'docker logs api-abilitysheet'
-    end
-  end
-end
