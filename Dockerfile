@@ -42,13 +42,13 @@ RUN \
       crenv rehash
 RUN apt-get install postgresql-client-9.5 -y
 
-ADD ./public     ./public
-ADD ./src        ./src
 ADD ./shard.yml  ./shard.yml
 ADD ./shard.lock ./shard.lock
-ADD ./.env       ./.env
-
 RUN shards
+
+ADD ./public     ./public
+ADD ./src        ./src
+ADD ./.env       ./.env
 RUN crystal build --release src/app.cr
 
 CMD /bin/bash && ./app
