@@ -48,9 +48,8 @@ ADD ./shard.yml  ./shard.yml
 ADD ./shard.lock ./shard.lock
 ADD ./.env       ./.env
 
-RUN \
-      shards && \
-      crystal build --release src/app.cr
+RUN shards
+RUN crystal build --release src/app.cr
 
 CMD /bin/bash && ./app
 
