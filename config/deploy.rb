@@ -6,7 +6,7 @@ set :repo_url, 'https://github.com/8398a7/api-abilitysheet.git'
 set :deploy_to, '/var/www/app/api-abilitysheet'
 
 set :pty, true
-append :linked_files, '.env'
+append :linked_files, '.env', 'kemal.log'
 
 set :default_env, path: '/usr/local/rbenv/shims:/usr/local/rbenv/bin:$PATH'
 set :rbenv_type, :system
@@ -19,10 +19,14 @@ namespace :deploy do
       execute "cd #{release_path}; docker build -t abilitysheet ."
     end
   end
+  task :write_logs do
+    on roles(:app) do
+      execute "docker logs api-abilitysheet >> #{shared_path}/kemal.log; exit 0"
+    end
+  end
   task :remove do
     on roles(:app) do
-      ps = capture 'docker ps'
-      execute 'echo api-abilitysheet | xargs docker stop | xargs docker rm' if ps.include?('api-abilitysheet')
+      execute 'echo api-abilitysheet|xargs docker stop|xargs docker rm; exit 0'
     end
   end
   task :run do
@@ -32,6 +36,15 @@ namespace :deploy do
   end
 
   before 'symlink:release', :build
-  after :build, :remove
+  after :build, :write_logs
+  after :write_logs, :remove
   after :remove, :run
+end
+
+namespace :logs do
+  task :show do
+    on roles(:app) do
+      puts capture 'docker logs api-abilitysheet'
+    end
+  end
 end
