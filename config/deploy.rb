@@ -22,7 +22,7 @@ namespace :deploy do
   task :remove do
     on roles(:app) do
       res = capture 'docker ps'
-      execute 'docker stop api-abilitysheet; docker rm api-abilitysheet' if res.include?('api-abilitysheet')
+      execute 'echo api-abilitysheet | xargs docker stop | xargs docker rm' if res.include?('api-abilitysheet')
     end
   end
   task :run do
