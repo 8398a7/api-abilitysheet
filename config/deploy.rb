@@ -21,8 +21,8 @@ namespace :deploy do
   end
   task :remove do
     on roles(:app) do
-      res = capture 'docker ps'
-      execute 'echo api-abilitysheet | xargs docker stop | xargs docker rm' if res.include?('api-abilitysheet')
+      ps = capture 'docker ps'
+      execute 'echo api-abilitysheet | xargs docker stop | xargs docker rm' if ps.include?('api-abilitysheet')
     end
   end
   task :run do
@@ -31,7 +31,7 @@ namespace :deploy do
     end
   end
 
-  after 'symlink:linked_files', :build
+  before 'symlink:release', :build
   after :build, :remove
   after :remove, :run
 end
