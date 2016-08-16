@@ -2,7 +2,7 @@ namespace :deploy do
   desc 'build abilitysheet'
   task :build do
     on roles(:app) do
-      execute "cd #{release_path}; rm .env; cp ../../shared/.env ."
+      execute "rm #{release_path}/.env; cp #{shared_path}/.env #{release_path}"
       execute "cd #{release_path}; docker build -t abilitysheet ."
     end
   end
