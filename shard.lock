@@ -2,7 +2,7 @@ version: 1.0
 shards:
   dotenv:
     github: gdotdesign/cr-dotenv
-    commit: 345a63900ab84ac702f2fff37c39cc089fe47f74
+    commit: 68702bfa0a3c7eda9aa448c36d2d68dcecce7677
 
   kemal:
     github: sdogruyol/kemal
@@ -14,7 +14,7 @@ shards:
 
   pg:
     github: will/crystal-pg
-    version: 0.10.0
+    version: 0.9.1
 
   radix:
     github: luislavena/radix
