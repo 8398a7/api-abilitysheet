@@ -7,5 +7,6 @@ dependencies:
     version: 0.14.1
   pg:
     github: will/crystal-pg
+    version: 0.9.1
   dotenv:
     github: gdotdesign/cr-dotenv
