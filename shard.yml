@@ -5,8 +5,7 @@ dependencies:
   kemal:
     github: sdogruyol/kemal
     version: 0.14.1
-  kemal-pg:
-    github: sdogruyol/kemal-pg
-    branch: master
+  pg:
+    github: will/crystal-pg
   dotenv:
     github: gdotdesign/cr-dotenv

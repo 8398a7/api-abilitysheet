@@ -1,6 +1,6 @@
 require "kemal"
 require "json"
-require "kemal-pg"
+require "pg"
 require "dotenv"
 
 Dotenv.load
@@ -9,13 +9,12 @@ config = Kemal.config
 config.env = "production"
 config.port = 8080
 
-pg_connect ENV["DB_URL"], capacity: 10, timeout: 0.1
+connection = PG.connect(ENV["DB_URL"])
 
 get "/users/recent200" do |env|
   env.response.content_type = "application/json"
   query = "SELECT users.id, users.djname, users.iidxid, users.pref, scores.updated_at, scores.state, users.grade, sheets.title FROM users, scores, sheets WHERE users.id = scores.user_id AND scores.state != 7 AND sheets.id = scores.sheet_id ORDER BY scores.updated_at DESC LIMIT 6400"
   users = connection.exec({Int32, String, String, Int32, Time, Int32, Int32, String}, query)
-  release
 
   recent_users = Array(Int32).new
   ret = Array(
@@ -39,7 +38,6 @@ end
 get "/users/count" do |env|
   env.response.content_type = "application/json"
   result = connection.exec({ Int64 }, "SELECT count(id) FROM users")
-  release
 
   { users: result.rows[0][0] }.to_json
 end
@@ -51,7 +49,6 @@ get "/sheets" do |env|
   ).new
   query = "SELECT sheets.id, sheets.title, sheets.n_ability, sheets.h_ability FROM sheets WHERE sheets.active = true ORDER BY sheets.id"
   results = connection.exec({ Int32, String, Int32, Int32 }, query)
-  release
 
   results.rows.not_nil!.each do |row|
     sheets.push({ id: row[0], title: row[1], n_ability: row[2], h_ability: row[3] })
