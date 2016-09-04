@@ -1,6 +1,6 @@
 set :branch, :master
 
-server 'default', user: 'deploy', roles: %w(web app db)
+server 'v_iidx12', user: 'deploy', roles: %w(web app db)
 
 set :ssh_options, {
   keys: [File.expand_path('~/.ssh/id_rsa')],
