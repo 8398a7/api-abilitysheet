@@ -8,7 +8,7 @@ namespace :deploy do
   end
   task :write_logs do
     on roles(:app) do
-      execute "docker logs api-abilitysheet >> #{shared_path}/kemal.log; exit 0"
+      execute "docker logs api-abilitysheet >> #{shared_path}/gin.log; exit 0"
     end
   end
   task :remove do
@@ -18,7 +18,7 @@ namespace :deploy do
   end
   task :run do
     on roles(:app) do
-      execute 'docker run -d -p 8080:8080 --name=api-abilitysheet abilitysheet'
+      execute "docker run -v $(pwd)/public:/app/public --rm --env-file #{shared_path}/.env -d -p 8080:8080 --name=api-abilitysheet abilitysheet"
     end
   end
 

@@ -22,6 +22,8 @@ func main() {
 	checkErr(err)
 
 	r := gin.Default()
+	r.Use(gin.Logger())
+	r.StaticFile("/favicon.ico", "./public/favicon.ico")
 
 	r.GET("/users/count", func(c *gin.Context) {
 		column := "count"
