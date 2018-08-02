@@ -1,58 +1,23 @@
-FROM ubuntu:xenial
+FROM golang:1.10.3-alpine3.8 AS build-env
 
-WORKDIR /root
-ENV CRENV_ROOT /usr/local/crenv
-ENV PATH $CRENV_ROOT/bin:$CRENV_ROOT/shims:$PATH
-ENV CRYSTAL_VERSION 0.18.7
+ENV HOME $GOPATH/src/github.com/8398a7/api-abilitysheet
+WORKDIR $HOME
 
 RUN \
-      echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections && \
-      ln --force /usr/share/zoneinfo/Japan /etc/localtime
-RUN apt-get update && apt-get install software-properties-common -y
-RUN \
-      apt-add-repository ppa:git-core/ppa && \
-      apt-get update && \
-      apt-get install git -y
-RUN \
-      git clone https://github.com/pine/crenv.git $CRENV_ROOT && \
-      mkdir $CRENV_ROOT/shims && \
-      mkdir $CRENV_ROOT/versions && \
-      mkdir $CRENV_ROOT/plugins && \
-      git clone https://github.com/pine/crystal-build.git $CRENV_ROOT/plugins/crystal-build && \
-      apt-get install -y \
-        build-essential \
-        curl \
-        libbsd-dev \
-        libedit-dev \
-        libevent-core-2.0-5 \
-        libevent-dev \
-        libevent-extra-2.0-5 \
-        libevent-openssl-2.0-5 \
-        libevent-pthreads-2.0-5 \
-        libgmp-dev \
-        libgmpxx4ldbl \
-        libpcl1-dev \
-        libssl-dev \
-        libxml2-dev \
-        libyaml-dev \
-        libreadline-dev \
-        pkg-config && \
-      crenv install $CRYSTAL_VERSION && \
-      crenv global $CRYSTAL_VERSION && \
-      crenv rehash
-RUN apt-get install postgresql-client-9.5 -y
+  apk upgrade --no-cache && \
+  apk add --update --no-cache git
+RUN go get -u github.com/golang/dep/cmd/dep
 
-COPY ./shard.yml  ./shard.yml
-COPY ./shard.lock ./shard.lock
-RUN shards
+COPY . $HOME
+RUN dep ensure
+RUN go build main.go
 
-COPY ./public     ./public
-COPY ./src        ./src
-COPY ./.env       ./.env
-RUN crystal build --release src/app.cr
+FROM alpine:3.8
 
-CMD /bin/bash && ./app
+ENV \
+  HOME=/app \
+  GIN_MODE=release
+WORKDIR $HOME
 
-# docker build -t abilitysheet .
-# docker run -d -p 8080:8080 --name=api-abilitysheet abilitysheet
-# docker exec -it api-abilitysheet bash
+COPY --from=build-env /go/src/github.com/8398a7/api-abilitysheet/main $HOME/main
+CMD $HOME/main

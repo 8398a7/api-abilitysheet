@@ -1,9 +1,5 @@
-.DS_Store
-.crystal/
-.shards/
-libs/
-app
-.env
-*.log
 .bundle
-bundle
+*.log
+vendor
+main
+.env
