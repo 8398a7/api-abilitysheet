@@ -2,7 +2,12 @@
 
 ## Usage
 
-by Docker for Mac
+```bash
+$ dep ensure
+$ go run main.go
+```
+
+or
 
 ```bash
 $ docker build -t api-abilitysheet:latest .
@@ -12,6 +17,8 @@ $ docker run \
   -e DB_URL=postgres://user@docker.for.mac.host.internal:5432/db?sslmode=disable \
   --rm -it api-abilitysheet:latest
 ```
+
+by Docker for Mac
 
 ## Requirements
 
