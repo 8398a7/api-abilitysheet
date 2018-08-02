@@ -2,21 +2,26 @@
 
 ## Usage
 
-```
-$ docker build -t abilitysheet .
-$ cp .env.circleci .env # your setting
-$ docker run -d -p 8080:8080 --name=api-abilitysheet abilitysheet
+by Docker for Mac
+
+```bash
+$ docker build -t api-abilitysheet:latest .
+$ docker run \
+  -p 8080:8080 \
+  -v $(pwd)/public:/app/public\
+  -e DB_URL=postgres://user@docker.for.mac.host.internal:5432/db?sslmode=disable \
+  --rm -it api-abilitysheet:latest
 ```
 
 ## Requirements
 
-- postgresql 9.5.3
-- docker 1.12.0
+- postgresql 10.4
+- docker 18.06
 
 ## nginx
 
-```
-upstream crystal {
+```nginx
+upstream gin {
   server localhost:8080;
   keepalive 300;
 }
@@ -26,7 +31,7 @@ server {
     access_log off;
     error_log /dev/null crit;
     add_header Access-Control-Allow-Origin *;
-    proxy_pass http://crystal;
+    proxy_pass http://gin;
     proxy_http_version 1.1;
     proxy_set_header Connection "";
   }
