@@ -48,7 +48,7 @@ func main() {
 		c.JSON(200, sheets)
 	})
 
-	r.GET("/users/recent200", func(c *gin.Context) {
+	r.GET("/users/recent", func(c *gin.Context) {
 		rows, err := db.Query("SELECT users.id, users.djname, users.iidxid, users.pref, scores.updated_at, scores.state, users.grade, sheets.title FROM users, scores, sheets WHERE users.id = scores.user_id AND scores.state != 7 AND sheets.id = scores.sheet_id ORDER BY scores.updated_at DESC LIMIT 6400")
 		checkErr(err)
 
