@@ -19,5 +19,5 @@ namespace :deploy do
 
   before 'symlink:release', :build
   after :build, :write_logs
-  after :write_logs, :remove
+  after :write_logs, :stop
 end
