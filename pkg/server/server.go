@@ -2,20 +2,20 @@ package server
 
 import (
 	"context"
-	"database/sql"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 	"golang.org/x/xerrors"
 )
 
 type Server struct {
-	conn *sql.DB
+	conn *sqlx.DB
 }
 
 func New(ctx context.Context, dataSourceName string) (*Server, error) {
-	conn, err := sql.Open("postgres", dataSourceName)
+	conn, err := sqlx.Connect("postgres", dataSourceName)
 	if err != nil {
 		return nil, xerrors.Errorf("failed to open sql: %w", err)
 	}

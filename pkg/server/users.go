@@ -25,21 +25,12 @@ func (s *Server) getUsersCount(c *gin.Context) {
 }
 
 func (s *Server) getUsersRecent(c *gin.Context) {
-	rows, err := s.conn.Query("SELECT users.id, users.djname, users.iidxid, users.pref, scores.updated_at, scores.state, users.grade, sheets.title FROM users, scores, sheets WHERE users.id = scores.user_id AND scores.state != 7 AND sheets.id = scores.sheet_id ORDER BY scores.updated_at DESC LIMIT 6400")
+	results := []models.Recent{}
+	err := s.conn.Select(&results, "SELECT users.id, users.djname, users.iidxid, users.pref, scores.updated_at, scores.state, users.grade, sheets.title FROM users, scores, sheets WHERE users.id = scores.user_id AND scores.state != 7 AND sheets.id = scores.sheet_id ORDER BY scores.updated_at DESC LIMIT 6400")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	results := []models.Recent{}
-	for rows.Next() {
-		result := models.Recent{}
-		err = rows.Scan(&result.ID, &result.Djname, &result.Iidxid, &result.Pref, &result.UpdatedAt, &result.State, &result.Grade, &result.Title)
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-			return
-		}
-		results = append(results, result)
-	}
 	c.JSON(http.StatusOK, results)
 }
