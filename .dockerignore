@@ -3,25 +3,17 @@
 .gitignore
 
 # assets/log
-log
-public
 README.md
 
 # dependencies
-.bundle
-Gemfile
-Gemfile.lock
-config
-Capfile
 vendor
 
 # environment variable
 .envrc
-.env.circleci
 
 # docker
 .dockerignore
 Dockerfile
 
 # app
-main
+bin
