@@ -1,5 +1,7 @@
 USER_NAME="yourName"
 DB_NAME="abilitysheet_development"
+GCP_PROJECT="yourProject"
 
 export DB_URL="postgres://${USER_NAME}@localhost:5432/${DB_NAME}?sslmode=disable"
 export DB_URL_FOR_DOCKER="postgres://${USER_NAME}@docker.for.mac.host.internal:5432/${DB_NAME}?sslmode=disable"
+export GCR="gcr.io/${GCP_PROJECT}/api-abilitysheet"

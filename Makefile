@@ -17,3 +17,6 @@ build-image: ## api-abilitysheetのimageを作成します
 	@docker build -t api-abilitysheet:latest .
 start-image: build-image ## api-abilitysheetのimageを使ってサーバを起動します
 	@docker run -p 8080:8080 -e DB_URL=${DB_URL_FOR_DOCKER} --rm -it api-abilitysheet:latest
+push-gcr: ## imageをGCRにアップロードします
+	@docker build -t ${GCR}:latest .
+	@docker push ${GCR}:latest

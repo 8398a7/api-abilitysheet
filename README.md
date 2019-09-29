@@ -14,6 +14,7 @@ golang
 docker
   build-image  api-abilitysheetのimageを作成します
   start-image  api-abilitysheetのimageを使ってサーバを起動します
+  push-gcr    imageをGCRにアップロードします
 ```
 
 ## Usage
