@@ -1,5 +1,21 @@
 # api-abilitysheet
 
+## Target List
+
+```bash
+$ make
+Usage: make <target>
+
+golang
+  build       bin以下にbuildします
+  start       serverをstartします
+  vendor      依存関係を更新します
+
+docker
+  build-image  api-abilitysheetのimageを作成します
+  start-image  api-abilitysheetのimageを使ってサーバを起動します
+```
+
 ## Usage
 
 ```bash
