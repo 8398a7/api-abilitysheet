@@ -21,7 +21,7 @@ func (s *Server) getUsersCount(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(200, gin.H{"users": count})
+	c.JSON(http.StatusOK, gin.H{"users": count})
 }
 
 func (s *Server) getUsersRecent(c *gin.Context) {
@@ -41,5 +41,5 @@ func (s *Server) getUsersRecent(c *gin.Context) {
 		}
 		results = append(results, result)
 	}
-	c.JSON(200, results)
+	c.JSON(http.StatusOK, results)
 }

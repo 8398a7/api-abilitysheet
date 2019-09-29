@@ -24,5 +24,5 @@ func (s *Server) getSheets(c *gin.Context) {
 		}
 		sheets = append(sheets, sheet)
 	}
-	c.JSON(200, sheets)
+	c.JSON(http.StatusOK, sheets)
 }
