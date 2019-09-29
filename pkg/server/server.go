@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"database/sql"
@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
 
-	"github.com/8398a7/api-abilitysheet/models"
+	"github.com/8398a7/api-abilitysheet/pkg/models"
 )
 
 func checkErr(err error) {
@@ -17,7 +17,7 @@ func checkErr(err error) {
 	}
 }
 
-func main() {
+func Run() {
 	db, err := sql.Open("postgres", os.Getenv("DB_URL"))
 	checkErr(err)
 
@@ -62,6 +62,8 @@ func main() {
 		c.JSON(200, results)
 	})
 
-	r.Run()
+	if err := r.Run(); err != nil {
+		checkErr(err)
+	}
 	defer db.Close()
 }
