@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"database/sql"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
@@ -30,6 +31,8 @@ func (s *Server) Run(ctx context.Context) error {
 	r.Use(gin.Logger())
 	r.StaticFile("/favicon.ico", "./public/favicon.ico")
 
+	r.GET("/health_check", s.healthCheck)
+
 	r.GET("/users/count", s.getUsersCount)
 	r.GET("/users/recent", s.getUsersRecent)
 
@@ -40,4 +43,8 @@ func (s *Server) Run(ctx context.Context) error {
 	}
 
 	return nil
+}
+
+func (s *Server) healthCheck(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{"status": "ok"})
 }
