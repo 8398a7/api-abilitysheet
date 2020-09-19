@@ -8,7 +8,7 @@ import (
 )
 
 func (s *Server) getSheets(c *gin.Context) {
-	sheets := []models.Sheet{}
+	var sheets []models.Sheet
 	err := s.conn.Select(&sheets, "SELECT sheets.id, sheets.title, sheets.n_ability, sheets.h_ability FROM sheets WHERE sheets.active = true ORDER BY sheets.id")
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

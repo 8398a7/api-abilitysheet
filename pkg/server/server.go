@@ -27,8 +27,11 @@ func New(ctx context.Context, dataSourceName string) (*Server, error) {
 func (s *Server) Run(ctx context.Context) error {
 	defer s.conn.Close()
 
-	r := gin.Default()
-	r.Use(gin.Logger())
+	r := gin.New()
+	r.Use(
+		gin.LoggerWithWriter(gin.DefaultWriter, "/health_check"),
+		gin.Recovery(),
+	)
 	r.StaticFile("/favicon.ico", "./public/favicon.ico")
 
 	r.GET("/health_check", s.healthCheck)
