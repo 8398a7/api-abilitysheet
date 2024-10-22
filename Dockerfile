@@ -1,4 +1,4 @@
-FROM golang:1.15.2-alpine3.12 AS build-env
+FROM golang:1.23.2-alpine3.20 AS build-env
 
 ENV HOME $GOPATH/src/github.com/8398a7/api-abilitysheet
 WORKDIR $HOME
@@ -12,7 +12,7 @@ RUN go mod download
 COPY . $HOME
 RUN make build
 
-FROM alpine:3.12
+FROM alpine:3.20
 
 ENV \
   HOME=/app \
